@@ -6,7 +6,6 @@ import { updateAcessData } from './route/update/update-acesseData-route'
 import { createdStudents } from './route/create/create-student-route'
 import { createdPreInstitutos } from './route/create/create-preschool-route'
 import {
-  getCourse,
   getCourseId,
   getCourseInStudent,
   getStudentInCourse,
@@ -21,11 +20,39 @@ import {
 import { getDisciplineRoute } from './route/list/get-discipline-route'
 import { createDisciplines } from './route/create/create-disciplenes-route'
 import { updateCourseIdOnDisciplines } from './route/update/update-courseIdOnDisciplines-route'
+import { fastifyCors } from '@fastify/cors'
+import {
+  jsonSchemaTransform,
+  serializerCompiler,
+  validatorCompiler,
+  type ZodTypeProvider,
+} from 'fastify-type-provider-zod'
+import { fastifySwagger } from '@fastify/swagger'
+import { fastifySwaggerUi } from '@fastify/swagger-ui'
+import { createdStudentsLogin } from './route/create/create-login-students-route'
 
-const app = fastify()
+const app = fastify().withTypeProvider<ZodTypeProvider>()
+
+app.setValidatorCompiler(validatorCompiler)
+app.setSerializerCompiler(serializerCompiler)
+
+app.register(fastifyCors, { origin: '*' })
+
+app.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: 'api',
+      version: '1.0.0',
+    },
+  },
+  transform: jsonSchemaTransform,
+})
+
+app.register(fastifySwaggerUi, {
+  routePrefix: '/docs',
+})
 
 app.register(getStudents)
-app.register(getCourse)
 app.register(getCourseId)
 app.register(getAcessData)
 app.register(getRegistration)
@@ -35,6 +62,7 @@ app.register(getStudentInCourse)
 app.register(getCourseInStudent)
 
 app.register(creatingAcessData)
+app.register(createdStudentsLogin)
 app.register(createdStudents)
 app.register(createdPreInstitutos)
 app.register(createCourses)

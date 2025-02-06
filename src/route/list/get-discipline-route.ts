@@ -4,11 +4,6 @@ import { prismaClient } from '../../../database/script'
 import z from 'zod'
 
 export const getDisciplineRoute: FastifyPluginAsyncZod = async (app, opts) => {
-  app.get('/discipline', async (request, reply) => {
-    const discipline = await prismaClient.discipline.findMany()
-    return { discipline }
-  })
-
   app.get('/discipline/:id', async (request, reply) => {
     const paramsSchema = z.object({
       id: z.string(),

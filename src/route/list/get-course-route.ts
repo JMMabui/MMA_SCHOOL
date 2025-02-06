@@ -2,15 +2,6 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { prismaClient } from '../../../database/script'
 import z from 'zod'
 
-// lista todos cursos
-export const getCourse: FastifyPluginAsyncZod = async (app, opts) => {
-  app.get('/course', async (request, reply) => {
-    const course = await prismaClient.course.findMany()
-
-    return { course }
-  })
-}
-
 // lista um curso específico
 export const getCourseId: FastifyPluginAsyncZod = async (app, opts) => {
   app.get('/course/:id', async (request, reply) => {

@@ -14,7 +14,7 @@ export async function createdPreInstituto({
   schoolProvincy,
   student_id,
 }: preInstitutoRequest) {
-  await prismaClient.preSchool.create({
+  const data = await prismaClient.preSchool.create({
     data: {
       schoolLevel,
       schoolName,
@@ -22,4 +22,6 @@ export async function createdPreInstituto({
       student_id,
     },
   })
+
+  return data
 }

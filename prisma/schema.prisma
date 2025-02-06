@@ -86,44 +86,48 @@ enum Semester {
   SEGUNDO_SEMESTRE
 }
 
-model AcessData {
-  id         String    @id @default(uuid())
-  email      String    @unique
-  contact    String
-  password   String
-  createdAt  DateTime  @default(now()) @map("created_at")
-  updatedAt  DateTime? @map("updated_at")
-  student_id String    @unique
-  student    Student   @relation(fields: [student_id], references: [id])
+model LoginData {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  contact   String
+  password  String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
 
-  @@map("acess_data")
+  student Student? @relation // Relacionamento com Student
+
+  @@map("login_data")
 }
 
 model Student {
-  id                 String              @id //Gera o numero de estudante onde os 4 primeiros digitos são o ano de matricula
+  id                 String            @id @default(uuid())
   surname            String
   name               String
-  dataOfBirth        DateTime
-  placeOfBirth       String
+  dataOfBirth        DateTime          @map("date_of_birth")
+  placeOfBirth       String            @map("place_of_birth")
   gender             Gender
-  maritalStatus      MaritalStatus
-  provincyAddress    ProvincyAddress
+  maritalStatus      MaritalStatus     @map("marital_status")
+  provincyAddress    ProvincyAddress   @map("provincy_address")
   address            String
-  fatherName         String
-  motherName         String
-  documentType       Type
-  documentNumber     String
-  documentIssuedAt   DateTime
-  documentExpiredAt  DateTime
-  nuit               Int
-  createdAt          DateTime            @default(now()) @map("created_at")
-  updatedAt          DateTime            @updatedAt @map("updated_at")
-  AcessData          AcessData[]
-  Registration       Registration[]
-  PreSchool          PreSchool[]
-  EducationOfficer   EducationOfficer?   @relation(fields: [educationOfficerId], references: [id])
-  educationOfficerId String?
-  StudentDiscipline  StudentDiscipline[]
+  fatherName         String            @map("father_name")
+  motherName         String            @map("mother_name")
+  documentType       Type              @map("document_type")
+  documentNumber     String            @map("document_number")
+  documentIssuedAt   DateTime          @map("document_issued_at")
+  documentExpiredAt  DateTime          @map("document_expired_at")
+  nuit               Int               @unique
+  educationOfficerId String?           @map("education_officer_id")
+  login_id           String?           @unique
+  loginData          LoginData?        @relation(fields: [login_id], references: [id]) // Relacionamento com LoginData
+  EducationOfficer   EducationOfficer? @relation(fields: [educationOfficerId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relacionamentos:
+  Registration      Registration[] // Relacionamento com Registration
+  PreSchool         PreSchool[] // Relacionamento com PreSchool
+  StudentDiscipline StudentDiscipline[] // Relacionamento com StudentDiscipline
 
   @@map("student")
 }

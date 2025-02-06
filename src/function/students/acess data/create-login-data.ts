@@ -1,25 +1,24 @@
 import { string } from 'zod'
 import { prismaClient } from '../../../../database/script'
 
-interface createAcessDataRequest {
+interface createLoginSchema {
   email: string
   contact: string
   password: string
-  student_id: string
 }
 
-export async function createAcessData({
+export async function createLogin({
   email,
   contact,
   password,
-  student_id,
-}: createAcessDataRequest) {
-  await prismaClient.acessData.create({
+}: createLoginSchema) {
+  const login = await prismaClient.loginData.create({
     data: {
       email,
       contact,
       password,
-      student_id,
     },
   })
+
+  return login
 }

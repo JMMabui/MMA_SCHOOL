@@ -1,17 +1,14 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { prismaClient } from '../../../database/script'
 import z from 'zod'
+import type { FastifyTypeInstance } from '../../type'
 
-export const getStudents: FastifyPluginAsyncZod = async (app, opts) => {
+export const getStudents: FastifyPluginAsyncZod = async (
+  app: FastifyTypeInstance,
+  opts
+) => {
   const paramsSchema = z.object({
     id: z.string(),
-  })
-
-  app.get('/students', async (request, reply) => {
-    const students = await prismaClient.student.findMany()
-    const totalStudents = await prismaClient.student.count()
-    console.log(`total de estudentes inscritos: ${totalStudents}`)
-    return students
   })
 
   app.get('/students/:id', async (request, reply) => {
@@ -44,7 +41,7 @@ export const getStudents: FastifyPluginAsyncZod = async (app, opts) => {
     console.log(`numero de estudante: ${numberStudent}`)
     console.log(`nome completo: ${fullName}`)
 
-    return reply.status(200).send({ message: 'Estudante encontrado', student })
+    return reply.status(200).send({ student })
   })
 
   app.get('/students-discipline/:id', async (request, reply) => {
@@ -112,18 +109,18 @@ export const getStudents: FastifyPluginAsyncZod = async (app, opts) => {
               },
             },
           },
-          StudentDiscipline: {
-            where: { status: 'NAO_INSCRITO' },
-            select: {
-              discipline: {
-                select: {
-                  codigo: true,
-                  disciplineName: true,
-                  semester: true,
-                },
-              },
-            },
-          },
+          // StudentDiscipline: {
+          //   where: { status: 'NAO_INSCRITO' },
+          //   select: {
+          //     discipline: {
+          //       select: {
+          //         codigo: true,
+          //         disciplineName: true,
+          //         semester: true,
+          //       },
+          //     },
+          //   },
+          // },
         },
       })
 
