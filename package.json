@@ -22,6 +22,7 @@
   "dependencies": {
     "@fastify/jwt": "^9.0.3",
     "@prisma/client": "^6.2.1",
+    "api": "file:",
     "bcrypt": "^5.1.1",
     "dayjs": "^1.11.13",
     "fastify": "^5.2.1",
